@@ -1,0 +1,20 @@
+.app {
+  height: 100vh;
+}
+
+.list {
+  position: relative;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+.sticky {
+  position: sticky !important;
+  z-index: 999;
+}
