@@ -1,0 +1,53 @@
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+[?1034hbash-3.2$ 
+
+Character Attributes (SGR, Select Graphic Rendition)
+[0m[0m 0  Normal                 - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[1m 1  Bold                   - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[2m 2  Faint/dim              - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[3m 3  Italicized             - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[4m 4  Underlined             - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[5m 5  Blink                  - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[7m 7  Inverse                - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[8m 8  Invisible              - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[9m 9  Crossed-out characters - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[21m 21 Doubly-underlined      - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[22m 22 Normal                 - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[23m 23 Not italicized         - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[24m 24 Not underlined         - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[25m 25 Steady (not blink)     - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[27m 27 Positive (not inverse) - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[28m 28 Visible (not hidden)   - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[29m 29 Not crossed-out        - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[30m 30 Foreground Black       - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[31m 31 Foreground Red         - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[32m 32 Foreground Green       - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[33m 33 Foreground Yellow      - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[34m 34 Foreground Blue        - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[35m 35 Foreground Magenta     - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[36m 36 Foreground Cyan        - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[37m 37 Foreground White       - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[39m 39 Foreground default     - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[40m 40 Background Black       - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[41m 41 Background Red         - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[42m 42 Background Green       - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[43m 43 Background Yellow      - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[44m 44 Background Blue        - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[45m 45 Background Magenta     - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[46m 46 Background Cyan        - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[47m 47 Background White       - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[49m 49 Background default     - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[53m 53 Overlined              - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[55m 55 Not overlined          - abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+
+
+Combinations
+[0m[1;2;3;4;5;6;7;9m Bold, Faint/dim, Italicized, Underlined, Blink, , Inverse, Crossed-out characters
+abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[2;41m Faint/dim, Background Red
+abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m
+[0m[4;53m Underlined, Overlined
+abcdefghijklmnopqrstuvwxyz 0123456789 汉语 한국어 👽[0m

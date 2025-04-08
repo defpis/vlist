@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { debounce, omit, range } from "lodash-es";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
+import { injectCss, ROW_CONTAINER_CLASS } from "./patch";
 
 const useUpdate = () => {
   const [updateId, setUpdateId] = useState<number>(0);
@@ -14,7 +15,7 @@ const useUpdate = () => {
       debounce(() => {
         setUpdateId((id) => (id + 1) % 1000);
       }, 100),
-    [],
+    []
   );
 
   return { updateId, update };
@@ -23,30 +24,36 @@ const useUpdate = () => {
 const Term = (props: any) => {
   const { content, termRef } = props;
 
-  const divRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const { xterm } = termRef.current;
 
   useEffect(() => {
-    const div = divRef.current;
-    if (!div || !xterm) return;
+    const container = containerRef.current;
+    if (!container || !xterm) return;
+
+    container.style.width = "100%";
+    container.style.backgroundColor = "#1A1A1A";
+    container.style.color = "#E0E0E0";
+    container.style.fontFamily = "Menlo";
+    container.style.fontSize = "12px";
+    container.style.fontWeight = "normal";
 
     xterm.reset();
 
-    div.style.width = "100%";
-    div.style.backgroundColor = "#000";
-    div.style.color = "#E0E0E0";
-    div.style.fontFamily = "Menlo";
-    div.style.fontSize = "12px";
-    div.style.fontWeight = "normal";
+    const classPrefix = "xterm-custom";
+    container.className = classPrefix;
 
     const core = xterm._core;
     const renderer = core._renderService._renderer.value;
     const { buffer } = renderer._bufferService;
 
+    const themeStyleElement = injectCss(renderer, classPrefix);
+
     core.writeSync(content);
 
-    const rows = [];
+    const rowElement = document.createElement("div");
+    rowElement.className = ROW_CONTAINER_CLASS;
 
     for (let i = 0; i < buffer.lines.length; i++) {
       const lineData = buffer.lines.get(i);
@@ -72,18 +79,18 @@ const Term = (props: any) => {
             renderer.dimensions.css.cell.width,
             renderer._widthCache,
             -1,
-            -1,
-          ),
+            -1
+          )
         );
 
-        rows.push(row);
+        rowElement.appendChild(row);
       }
     }
 
-    div.replaceChildren(...rows);
+    container.replaceChildren(themeStyleElement, rowElement);
   }, [content, xterm]);
 
-  return <div ref={divRef}></div>;
+  return <div ref={containerRef}></div>;
 };
 
 const RenderBlock = ({ index, style, data }: any) => {
@@ -144,7 +151,7 @@ const RenderItem = (props: any) => {
   return <RenderBlock {...props} />;
 };
 
-let id = 100;
+// let id = 100;
 
 export function App() {
   const listRef = useRef<any>(null);
@@ -154,36 +161,50 @@ export function App() {
       id: i,
       content:
         "Xterm.js is a front-end component written in TypeScript that lets applications bring fully-featured terminals to their users in the browser. It's used by popular projects such as VS Code, Hyper and Theia.",
-    })),
+    }))
   );
 
-  // 测试添加内容
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (id === 110) {
-        return clearInterval(timer);
-      }
-
-      id++;
-      const repeat = (id % 2) + 1;
-      setItems((prev) => [
-        ...prev,
-        {
-          id: id,
-          content: range(repeat)
-            .map(
-              () =>
-                "Xterm.js is a front-end component written in TypeScript that lets applications bring fully-featured terminals to their users in the browser. It's used by popular projects such as VS Code, Hyper and Theia.",
-            )
-            .join("\r\n"),
-        },
-      ]);
-    }, 200);
-
-    return () => {
-      clearInterval(timer);
-    };
+    fetch("/sgr-test.txt")
+      .then((resp) => resp.text())
+      .then((data) => {
+        setItems((prev) => [
+          ...prev,
+          {
+            id: 1,
+            content: data.replace(/\n/g, "\r\n"),
+          },
+        ]);
+      });
   }, []);
+
+  // 测试添加内容
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     if (id === 110) {
+  //       return clearInterval(timer);
+  //     }
+
+  //     id++;
+  //     const repeat = (id % 2) + 1;
+  //     setItems((prev) => [
+  //       ...prev,
+  //       {
+  //         id: id,
+  //         content: range(repeat)
+  //           .map(
+  //             () =>
+  //               "Xterm.js is a front-end component written in TypeScript that lets applications bring fully-featured terminals to their users in the browser. It's used by popular projects such as VS Code, Hyper and Theia."
+  //           )
+  //           .join("\r\n"),
+  //       },
+  //     ]);
+  //   }, 200);
+
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
 
   const resetAfterIndex = useMemo(() => {
     const indices = new Set<number>();
@@ -207,7 +228,7 @@ export function App() {
 
   const renderItems = useMemo(
     () => [{ height: space }, ...items],
-    [space, items],
+    [space, items]
   );
 
   const changeHeight = useCallback(
@@ -217,20 +238,20 @@ export function App() {
       setItems(newItems);
       resetAfterIndex(index);
     },
-    [items, resetAfterIndex],
+    [items, resetAfterIndex]
   );
 
   const changeSpace = useCallback(
     (index: number, containerHeight: number) => {
       const totalHeight = items.reduce(
         (acc: any, cur: any) => acc + (cur.height || 0),
-        0,
+        0
       );
       const newHeight = Math.max(0, containerHeight - totalHeight);
       setSpace(newHeight);
       resetAfterIndex(index);
     },
-    [items, resetAfterIndex],
+    [items, resetAfterIndex]
   );
 
   const xtermRef = useRef<any>(null);
@@ -250,9 +271,8 @@ export function App() {
       fontWeightBold: "bold",
       lineHeight: 1,
       theme: {
+        background: "#1A1A1A",
         foreground: "#E0E0E0",
-        background: "#000",
-        cursor: "#E0E0E0",
       },
       scrollback: 1000,
     });
