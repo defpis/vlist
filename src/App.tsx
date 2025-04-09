@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { debounce, omit, range } from "lodash-es";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { injectCss, ROW_CONTAINER_CLASS } from "./patch";
+import { makeCss, ROW_CONTAINER_CLASS, TERMINAL_CLASS_PREFIX } from "./makeCss";
 
 const useUpdate = () => {
   const [updateId, setUpdateId] = useState<number>(0);
@@ -41,16 +41,17 @@ const Term = (props: any) => {
 
     xterm.reset();
 
-    const classPrefix = "xterm-custom";
-    container.className = classPrefix;
-
     const core = xterm._core;
     const renderer = core._renderService._renderer.value;
     const { buffer } = renderer._bufferService;
 
-    const themeStyleElement = injectCss(renderer, classPrefix);
+    const terminalSelector = `${TERMINAL_CLASS_PREFIX}${renderer._terminalClass}`;
+    container.className = terminalSelector;
 
-    core.writeSync(content);
+    renderer._updateDimensions();
+    const themeStyleElement = makeCss(renderer, terminalSelector);
+
+    core.writeSync(content?.split("[SEPARATOR]").join(""));
 
     const rowElement = document.createElement("div");
     rowElement.className = ROW_CONTAINER_CLASS;

@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+/* eslint-disable prefer-template */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+/* eslint-disable no-autofix/@typescript-eslint/no-unnecessary-condition */
+/* eslint-disable default-case */
+/* eslint-disable @typescript-eslint/quotes */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-namespace */
 /**
  * Copyright (c) 2019 The xterm.js authors. All rights reserved.
@@ -27,7 +34,7 @@ export namespace channels {
   export function toCss(r: number, g: number, b: number, a?: number): string {
     if (a !== undefined) {
       return `#${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}${toPaddedHex(
-        a
+        a,
       )}`;
     }
     return `#${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}`;
@@ -37,7 +44,7 @@ export namespace channels {
     r: number,
     g: number,
     b: number,
-    a: number = 0xff
+    a: number = 0xff,
   ): number {
     // Note: The aggregated number is RGBA32 (BE), thus needs to be converted to ABGR32
     // on LE systems, before it can be used for direct 32-bit buffer writes.
@@ -86,7 +93,7 @@ export namespace color {
   export function ensureContrastRatio(
     bg: IColor,
     fg: IColor,
-    ratio: number
+    ratio: number,
   ): IColor | undefined {
     const result = rgba.ensureContrastRatio(bg.rgba, fg.rgba, ratio);
     if (!result) {
@@ -95,7 +102,7 @@ export namespace color {
     return channels.toColor(
       (result >> 24) & 0xff,
       (result >> 16) & 0xff,
-      (result >> 8) & 0xff
+      (result >> 8) & 0xff,
     );
   }
 
@@ -197,14 +204,14 @@ export namespace css {
 
     // Formats: rgb() or rgba()
     const rgbaMatch = css.match(
-      /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*(0|1|\d?\.(\d+))\s*)?\)/
+      /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*(0|1|\d?\.(\d+))\s*)?\)/,
     );
     if (rgbaMatch) {
       $r = parseInt(rgbaMatch[1]);
       $g = parseInt(rgbaMatch[2]);
       $b = parseInt(rgbaMatch[3]);
       $a = Math.round(
-        (rgbaMatch[5] === undefined ? 1 : parseFloat(rgbaMatch[5])) * 0xff
+        (rgbaMatch[5] === undefined ? 1 : parseFloat(rgbaMatch[5])) * 0xff,
       );
       return channels.toColor($r, $g, $b, $a);
     }
@@ -254,7 +261,7 @@ export namespace rgb {
     return relativeLuminance2(
       (rgb >> 16) & 0xff,
       (rgb >> 8) & 0xff,
-      rgb & 0xff
+      rgb & 0xff,
     );
   }
 
@@ -314,7 +321,7 @@ export namespace rgba {
   export function ensureContrastRatio(
     bgRgba: number,
     fgRgba: number,
-    ratio: number
+    ratio: number,
   ): number | undefined {
     const bgL = rgb.relativeLuminance(bgRgba >> 8);
     const fgL = rgb.relativeLuminance(fgRgba >> 8);
@@ -324,13 +331,13 @@ export namespace rgba {
         const resultA = reduceLuminance(bgRgba, fgRgba, ratio);
         const resultARatio = contrastRatio(
           bgL,
-          rgb.relativeLuminance(resultA >> 8)
+          rgb.relativeLuminance(resultA >> 8),
         );
         if (resultARatio < ratio) {
           const resultB = increaseLuminance(bgRgba, fgRgba, ratio);
           const resultBRatio = contrastRatio(
             bgL,
-            rgb.relativeLuminance(resultB >> 8)
+            rgb.relativeLuminance(resultB >> 8),
           );
           return resultARatio > resultBRatio ? resultA : resultB;
         }
@@ -339,13 +346,13 @@ export namespace rgba {
       const resultA = increaseLuminance(bgRgba, fgRgba, ratio);
       const resultARatio = contrastRatio(
         bgL,
-        rgb.relativeLuminance(resultA >> 8)
+        rgb.relativeLuminance(resultA >> 8),
       );
       if (resultARatio < ratio) {
         const resultB = reduceLuminance(bgRgba, fgRgba, ratio);
         const resultBRatio = contrastRatio(
           bgL,
-          rgb.relativeLuminance(resultB >> 8)
+          rgb.relativeLuminance(resultB >> 8),
         );
         return resultARatio > resultBRatio ? resultA : resultB;
       }
@@ -357,7 +364,7 @@ export namespace rgba {
   export function reduceLuminance(
     bgRgba: number,
     fgRgba: number,
-    ratio: number
+    ratio: number,
   ): number {
     // This is a naive but fast approach to reducing luminance as converting to
     // HSL and back is expensive
@@ -369,7 +376,7 @@ export namespace rgba {
     let fgB = (fgRgba >> 8) & 0xff;
     let cr = contrastRatio(
       rgb.relativeLuminance2(fgR, fgG, fgB),
-      rgb.relativeLuminance2(bgR, bgG, bgB)
+      rgb.relativeLuminance2(bgR, bgG, bgB),
     );
     while (cr < ratio && (fgR > 0 || fgG > 0 || fgB > 0)) {
       // Reduce by 10% until the ratio is hit
@@ -378,7 +385,7 @@ export namespace rgba {
       fgB -= Math.max(0, Math.ceil(fgB * 0.1));
       cr = contrastRatio(
         rgb.relativeLuminance2(fgR, fgG, fgB),
-        rgb.relativeLuminance2(bgR, bgG, bgB)
+        rgb.relativeLuminance2(bgR, bgG, bgB),
       );
     }
     return ((fgR << 24) | (fgG << 16) | (fgB << 8) | 0xff) >>> 0;
@@ -387,7 +394,7 @@ export namespace rgba {
   export function increaseLuminance(
     bgRgba: number,
     fgRgba: number,
-    ratio: number
+    ratio: number,
   ): number {
     // This is a naive but fast approach to increasing luminance as converting to
     // HSL and back is expensive
@@ -399,7 +406,7 @@ export namespace rgba {
     let fgB = (fgRgba >> 8) & 0xff;
     let cr = contrastRatio(
       rgb.relativeLuminance2(fgR, fgG, fgB),
-      rgb.relativeLuminance2(bgR, bgG, bgB)
+      rgb.relativeLuminance2(bgR, bgG, bgB),
     );
     while (cr < ratio && (fgR < 0xff || fgG < 0xff || fgB < 0xff)) {
       // Increase by 10% until the ratio is hit
@@ -408,7 +415,7 @@ export namespace rgba {
       fgB = Math.min(0xff, fgB + Math.ceil((255 - fgB) * 0.1));
       cr = contrastRatio(
         rgb.relativeLuminance2(fgR, fgG, fgB),
-        rgb.relativeLuminance2(bgR, bgG, bgB)
+        rgb.relativeLuminance2(bgR, bgG, bgB),
       );
     }
     return ((fgR << 24) | (fgG << 16) | (fgB << 8) | 0xff) >>> 0;
